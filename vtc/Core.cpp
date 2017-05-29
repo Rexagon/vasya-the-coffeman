@@ -36,7 +36,7 @@ void Core::Run()
 			currentState->Update(dt);
 		}
 
-		m_window.clear(sf::Color(60, 60, 60, 255));
+		m_window.clear(sf::Color(92, 141, 137));
 
 		if (currentState = GetState()) {
 			currentState->Draw(dt);

@@ -4,25 +4,13 @@
 
 void StateLevel::Init()
 {
-	AssetManager::Bind("walk", TextureFactory("walk.png"));
-	AssetManager::Bind("jump", TextureFactory("jump.png"));
-	AssetManager::Bind("hit", TextureFactory("hit.png"));
+	m_player = std::make_unique<Player>("player.png");
 
-	Animation walking;
-	walking.SetSpriteSheet(AssetManager::Get<sf::Texture>("hit"));
-	walking.AddFrame(0, 0, 16, 32);
-	walking.AddFrame(16, 0, 16, 32);
-	walking.AddFrame(32, 0, 16, 32);
-	walking.AddFrame(48, 0, 16, 32);
-	walking.AddFrame(64, 0, 16, 32);
-	walking.AddFrame(80, 0, 16, 32);
-	walking.AddFrame(96, 0, 16, 32);
-	walking.AddFrame(112, 0, 16, 32);
-	walking.SetFrameDuration(0.05f);
+	m_view.reset(rect(0, 0, Core::GetWindow()->getSize().x, Core::GetWindow()->getSize().y));
 
-	m_player = std::make_unique<Sprite>();
-	m_player->SetAnimation(walking);
-	m_player->SetPosition(100.0f, 100.0f);
+	m_view.setViewport(sf::FloatRect(0.f, 0.f, 4.0f, 4.0f));
+
+	Core::GetWindow()->setView(m_view);
 }
 
 void StateLevel::Close()
@@ -31,15 +19,39 @@ void StateLevel::Close()
 
 void StateLevel::Update(const float dt)
 {
-	if (Input::GetKeyDown(Key::Right)) {
-		m_player->MirrorVertically(false);
-		m_player->GetAnimation()->Play();
+	if (Input::GetKeyDown(Key::Escape)) {
+		Core::DeleteState();
+		return;
 	}
 
-	if (Input::GetKeyDown(Key::Left)) {
-		m_player->MirrorVertically(true);
-		m_player->GetAnimation()->Play();
+	vec2 vector(0.0f, 0.0f);
+	if (Input::GetKey(Key::D)) {
+		vector += vec2(1.0f, 0.0f);
 	}
+
+	if (Input::GetKey(Key::A)) {
+		vector += vec2(-1.0f, 0.0f);
+	}
+
+	if (Input::GetKey(Key::W)) {
+		vector += vec2(0.0f,-1.0f);
+	}
+
+	if (Input::GetKey(Key::S)) {
+		vector += vec2(0.0f, 1.0f);
+	}
+
+	if (Input::GetMouseDown(Mouse::Left)) {
+		m_player->Hit();
+	}
+
+	m_player->Move(vector);
+
+	if (Input::GetKey(Key::Space)) {
+		m_player->Jump();
+	}
+
+	
 
 	m_player->Update(dt);
 }

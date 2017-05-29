@@ -9,8 +9,7 @@ public:
 
 	void Update(const float dt);
 
-	void MoveRight();
-	void MoveLeft();
+	void Move(const vec2& vector);
 	void Stop();
 
 	void Jump();
@@ -28,6 +27,10 @@ private:
 	vec2 m_vector;
 
 	Animation m_animationWalk;
+
 	Animation m_animationJump;
+	bool m_isJumping;
+
 	Animation m_animationHit;
+	bool m_isHitting;
 };

@@ -40,6 +40,9 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Resource managers</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
